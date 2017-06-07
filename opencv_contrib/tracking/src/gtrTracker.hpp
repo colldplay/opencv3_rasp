@@ -45,15 +45,11 @@
 
 #include "precomp.hpp"
 #include "opencv2/video/tracking.hpp"
+#include "opencv2/dnn.hpp"
 #include "gtrUtils.hpp"
 #include "opencv2/imgproc.hpp"
-
-#include <algorithm>
-#include <limits.h>
-
-#include "opencv2/opencv_modules.hpp"
-#ifdef HAVE_OPENCV_DNN
-#include "opencv2/dnn.hpp"
+#include<algorithm>
+#include<limits.h>
 
 namespace cv
 {
@@ -76,5 +72,5 @@ public:
 
 }
 }
-#endif
+
 #endif

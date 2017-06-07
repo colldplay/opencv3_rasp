@@ -72,9 +72,10 @@ Vec<double, 2> perfShift(const Mat& img1)
     mapTest.warp(img1, img2);
 
     // Register
-    Ptr<MapperGradShift> mapper = makePtr<MapperGradShift>();
+    MapperGradShift mapper;
     MapperPyramid mappPyr(mapper);
-    Ptr<Map> mapPtr = mappPyr.calculate(img1, img2);
+    Ptr<Map> mapPtr;
+    mappPyr.calculate(img1, img2, mapPtr);
 
     MapShift* mapShift = dynamic_cast<MapShift*>(mapPtr.get());
     return mapShift->getShift();
@@ -95,9 +96,10 @@ Matx<double, 2, 6> perfEuclidean(const Mat& img1)
     mapTest.warp(img1, img2);
 
     // Register
-    Ptr<MapperGradEuclid> mapper = makePtr<MapperGradEuclid>();
+    MapperGradEuclid mapper;
     MapperPyramid mappPyr(mapper);
-    Ptr<Map> mapPtr = mappPyr.calculate(img1, img2);
+    Ptr<Map> mapPtr;
+    mappPyr.calculate(img1, img2, mapPtr);
 
     MapAffine* mapAff = dynamic_cast<MapAffine*>(mapPtr.get());
     Matx<double, 2, 2> resLinTr = mapAff->getLinTr();
@@ -125,9 +127,10 @@ Matx<double, 2, 6> perfSimilarity(const Mat& img1)
     mapTest.warp(img1, img2);
 
     // Register
-    Ptr<MapperGradSimilar> mapper = makePtr<MapperGradSimilar>();
+    MapperGradSimilar mapper;
     MapperPyramid mappPyr(mapper);
-    Ptr<Map> mapPtr = mappPyr.calculate(img1, img2);
+    Ptr<Map> mapPtr;
+    mappPyr.calculate(img1, img2, mapPtr);
 
     MapAffine* mapAff = dynamic_cast<MapAffine*>(mapPtr.get());
     Matx<double, 2, 2> resLinTr = mapAff->getLinTr();
@@ -151,9 +154,10 @@ Matx<double, 2, 6> perfAffine(const Mat& img1)
     mapTest.warp(img1, img2);
 
     // Register
-    Ptr<MapperGradAffine> mapper = makePtr<MapperGradAffine>();
+    MapperGradAffine mapper;
     MapperPyramid mappPyr(mapper);
-    Ptr<Map> mapPtr = mappPyr.calculate(img1, img2);
+    Ptr<Map> mapPtr;
+    mappPyr.calculate(img1, img2, mapPtr);
 
     MapAffine* mapAff = dynamic_cast<MapAffine*>(mapPtr.get());
     Matx<double, 2, 2> resLinTr = mapAff->getLinTr();
@@ -175,9 +179,10 @@ Matx<double, 3, 3> perfProjective(const Mat& img1)
     mapTest.warp(img1, img2);
 
     // Register
-    Ptr<MapperGradProj> mapper = makePtr<MapperGradProj>();
+    MapperGradProj mapper;
     MapperPyramid mappPyr(mapper);
-    Ptr<Map> mapPtr = mappPyr.calculate(img1, img2);
+    Ptr<Map> mapPtr;
+    mappPyr.calculate(img1, img2, mapPtr);
 
     MapProjec* mapProj = dynamic_cast<MapProjec*>(mapPtr.get());
     mapProj->normalize();

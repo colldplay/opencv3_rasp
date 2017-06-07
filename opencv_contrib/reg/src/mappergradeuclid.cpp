@@ -44,22 +44,21 @@ namespace reg {
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-MapperGradEuclid::MapperGradEuclid()
+MapperGradEuclid::MapperGradEuclid(void)
 {
 }
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-MapperGradEuclid::~MapperGradEuclid()
+MapperGradEuclid::~MapperGradEuclid(void)
 {
 }
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-cv::Ptr<Map> MapperGradEuclid::calculate(
-    InputArray _img1, InputArray image2, cv::Ptr<Map> init) const
+void MapperGradEuclid::calculate(
+    const cv::Mat& img1, const cv::Mat& image2, cv::Ptr<Map>& res) const
 {
-    Mat img1 = _img1.getMat();
     Mat gradx, grady, imgDiff;
     Mat img2;
 
@@ -67,11 +66,11 @@ cv::Ptr<Map> MapperGradEuclid::calculate(
     CV_DbgAssert(img1.channels() == image2.channels());
     CV_DbgAssert(img1.channels() == 1 || img1.channels() == 3);
 
-    if(!init.empty()) {
+    if(!res.empty()) {
         // We have initial values for the registration: we move img2 to that initial reference
-        init->inverseWarp(image2, img2);
+        res->inverseWarp(image2, img2);
     } else {
-        img2 = image2.getMat();
+        img2 = image2;
     }
 
     // Matrices with reference frame coordinates
@@ -112,19 +111,16 @@ cv::Ptr<Map> MapperGradEuclid::calculate(
     Matx<double, 2, 2> linTr(cosT, -sinT, sinT, cosT);
     Vec<double, 2> shift(k(0), k(1));
 
-    if(init.empty()) {
-        return Ptr<Map>(new MapAffine(linTr, shift));
+    if(res.empty()) {
+        res = Ptr<Map>(new MapAffine(linTr, shift));
     } else {
-        Ptr<MapAffine> newTr(new MapAffine(linTr, shift));
-        MapAffine* initPtr = dynamic_cast<MapAffine*>(init.get());
-        Ptr<MapAffine> oldTr(new MapAffine(initPtr->getLinTr(), initPtr->getShift()));
-        oldTr->compose(newTr);
-        return oldTr;
+        MapAffine newTr(linTr, shift);
+        res->compose(newTr);
    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-cv::Ptr<Map> MapperGradEuclid::getMap() const
+cv::Ptr<Map> MapperGradEuclid::getMap(void) const
 {
     return cv::Ptr<Map>(new MapAffine());
 }
