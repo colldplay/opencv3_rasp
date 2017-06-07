@@ -49,33 +49,33 @@ namespace reg {
 /*!
  * Defines an affine transformation
  */
-class CV_EXPORTS_W MapAffine : public Map
+class CV_EXPORTS MapAffine : public Map
 {
 public:
     /*!
      * Default constructor builds an identity map
      */
-    CV_WRAP MapAffine();
+    MapAffine(void);
 
     /*!
      * Constructor providing explicit values
      * \param[in] linTr Linear part of the affine transformation
      * \param[in] shift Displacement part of the affine transformation
      */
-    CV_WRAP MapAffine(InputArray linTr, InputArray shift);
+    MapAffine(const cv::Matx<double, 2, 2>& linTr, const cv::Vec<double, 2>& shift);
 
     /*!
      * Destructor
      */
-    ~MapAffine();
+    ~MapAffine(void);
 
-    CV_WRAP void inverseWarp(InputArray img1, OutputArray img2) const;
+    void inverseWarp(const cv::Mat& img1, cv::Mat& img2) const;
 
-    CV_WRAP cv::Ptr<Map> inverseMap() const;
+    cv::Ptr<Map> inverseMap(void) const;
 
-    CV_WRAP void compose(cv::Ptr<Map> map);
+    void compose(const Map& map);
 
-    CV_WRAP void scale(double factor);
+    void scale(double factor);
 
     /*!
      * Return linear part of the affine transformation
@@ -85,20 +85,12 @@ public:
         return linTr_;
     }
 
-    CV_WRAP void getLinTr(OutputArray linTr) const {
-        Mat(linTr_).copyTo(linTr);
-    }
-
     /*!
      * Return displacement part of the affine transformation
      * \return Displacement part of the affine transformation
      */
     const cv::Vec<double, 2>& getShift() const {
         return shift_;
-    }
-
-    CV_WRAP void getShift(OutputArray shift) const {
-        Mat(shift_).copyTo(shift);
     }
 
 private:

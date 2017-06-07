@@ -39,6 +39,7 @@ the use of this software, even if advised of the possibility of such damage.
 ********************************************************************************/
 
 #include "precomp.hpp"
+#include "opencv2/highgui.hpp"
 #include "opencv2/ximgproc/segmentation.hpp"
 
 #include <iostream>
