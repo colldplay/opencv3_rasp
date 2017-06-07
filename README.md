@@ -1,1 +1,1 @@
-# opencv3_rasp
+# opencv3 package for raspbian jessie to use with kinetic 
