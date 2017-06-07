@@ -39,16 +39,14 @@
  //
  //M*/
 
-#include <iostream>
-
-#ifdef HAVE_OPENCV_FEATURES2D
-
 #include <opencv2/line_descriptor.hpp>
+
 #include "opencv2/core/utility.hpp"
 #include <opencv2/imgproc.hpp>
 #include <opencv2/features2d.hpp>
 #include <opencv2/highgui.hpp>
 
+#include <iostream>
 #include <vector>
 #include <time.h>
 
@@ -196,12 +194,4 @@ int main( int argc, char** argv )
 
 }
 
-#else
 
-int main()
-{
-    std::cerr << "OpenCV was built without features2d module" << std::endl;
-    return 0;
-}
-
-#endif // HAVE_OPENCV_FEATURES2D

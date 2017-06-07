@@ -3,6 +3,8 @@
 
 #include "precomp.hpp"
 #include <vector>
+#include "opencv2/highgui.hpp"
+#include <opencv2/datasets/track_alov.hpp>
 
 namespace cv
 {
@@ -48,10 +50,10 @@ struct TrainingSample
 double generateRandomLaplacian(double b, double m);
 
 //Convert ALOV300++ anno coordinates to Rectangle BB
-Rect2f anno2rect(std::vector<Point2f> annoBB);
+Rect2f anno2rect(vector<Point2f> annoBB);
 
 //Gather samples from random video frame
-std::vector <TrainingSample> gatherFrameSamples(Mat prevFrame, Mat currFrame, Rect2f prevBB, Rect2f currBB);
+vector <TrainingSample> gatherFrameSamples(Mat prevFrame, Mat currFrame, Rect2f prevBB, Rect2f currBB);
 
 }
 }

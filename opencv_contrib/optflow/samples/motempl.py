@@ -37,8 +37,7 @@ if __name__ == '__main__':
         sys.exit(1)
     ret, frame = cam.read()
     if ret == False:
-        print("could not read from " + str(video_src) + " !\n")
-        sys.exit(1)
+        break
     h, w = frame.shape[:2]
     prev_frame = frame.copy()
     motion_history = np.zeros((h, w), np.float32)
@@ -46,8 +45,6 @@ if __name__ == '__main__':
     hsv[:,:,1] = 255
     while True:
         ret, frame = cam.read()
-        if ret == False:
-            break
         frame_diff = cv2.absdiff(frame, prev_frame)
         gray_diff = cv2.cvtColor(frame_diff, cv2.COLOR_BGR2GRAY)
         thrs = cv2.getTrackbarPos('threshold', 'motempl')
