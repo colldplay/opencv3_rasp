@@ -11,6 +11,7 @@
 
 #include "opencv2/ts.hpp"
 #include "opencv2/phase_unwrapping.hpp"
+#include <opencv2/rgbd.hpp>
 #include <iostream>
 
 #endif

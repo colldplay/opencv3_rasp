@@ -24,7 +24,6 @@
 #include <iostream>
 #include <cstring>
 #include <ctime>
-#include "roiSelector.hpp"
 
 #ifdef HAVE_OPENCV
 #include <opencv2/flann.hpp>
