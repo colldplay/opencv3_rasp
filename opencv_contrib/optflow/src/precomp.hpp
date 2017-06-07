@@ -45,8 +45,6 @@ the use of this software, even if advised of the possibility of such damage.
 #include <opencv2/optflow.hpp>
 #include <opencv2/video.hpp>
 #include <opencv2/imgproc.hpp>
-#include "opencv2/core/utility.hpp"
-#include "opencv2/core/private.hpp"
 #include "opencv2/core/ocl.hpp"
 
 #include <algorithm>

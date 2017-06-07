@@ -45,26 +45,25 @@ namespace reg {
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-MapAffine::MapAffine()
+MapAffine::MapAffine(void)
     : linTr_(Matx<double, 2, 2>::eye()), shift_()
 {
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-MapAffine::MapAffine(InputArray linTr, InputArray shift)
-    : linTr_(linTr.getMat()), shift_(shift.getMat())
+MapAffine::MapAffine(const Matx<double, 2, 2>& linTr, const Vec<double, 2>& shift)
+    : linTr_(linTr), shift_(shift)
 {
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-MapAffine::~MapAffine()
+MapAffine::~MapAffine(void)
 {
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void MapAffine::inverseWarp(InputArray _img1, OutputArray img2) const
+void MapAffine::inverseWarp(const Mat& img1, Mat& img2) const
 {
-    Mat img1 = _img1.getMat();
     // Rows and columns in destination
     Mat dest_r, dest_c;
     dest_r.create(img1.size(), CV_32FC1);
@@ -94,10 +93,10 @@ Ptr<Map> MapAffine::inverseMap(void) const
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void MapAffine::compose(cv::Ptr<Map> map)
+void MapAffine::compose(const Map& map)
 {
     // Composition of affine transformations T and T' is (T o T') = A'Ax + A'b + b'
-    const MapAffine& mapAff = static_cast<const MapAffine&>(*map);
+    const MapAffine& mapAff = static_cast<const MapAffine&>(map);
     Matx<double, 2, 2> compMat = mapAff.getLinTr()*linTr_;
     Vec<double, 2> compShift = mapAff.getLinTr()*shift_ + mapAff.getShift();
     linTr_ = compMat;

@@ -231,7 +231,7 @@ inline void updateBCB(int &num,int *f,int *b,int i,int v)
  *                If F is 3-channel, perform k-means clustering
  *                If F is 1-channel, only perform type-casting
  ***************************************************************/
-void featureIndexing(Mat &F, float **&wMap, int &nF, float sigmaI, int weightType){
+void featureIndexing(Mat &F, float **&wMap, int &nF, float sigmaI, WMFWeightType weightType){
     // Configuration and Declaration
     Mat FNew;
     int cols = F.cols, rows = F.rows;
@@ -493,7 +493,7 @@ Mat filterCore(Mat &I, Mat &F, float **wMap, int r=20, int nF=256, int nI=256, M
             // Move cut-point to the left
             if(balanceWeight >= 0)
             {
-                for(;balanceWeight >= 0 && curMedianVal > 0; curMedianVal--)
+                for(;balanceWeight >= 0 && curMedianVal; curMedianVal--)
                 {
                     float curWeight = 0;
                     int *nextHist = H[curMedianVal];
@@ -539,13 +539,8 @@ Mat filterCore(Mat &I, Mat &F, float **wMap, int r=20, int nF=256, int nI=256, M
             }
 
             // Weighted median is found and written to the output image
-            if(curMedianVal != -1)
-            {
-                if(balanceWeight < 0)
-                    outImg.ptr<int>(y,x)[0] = curMedianVal+1;
-                else
-                    outImg.ptr<int>(y,x)[0] = curMedianVal;
-            }
+            if(balanceWeight<0)outImg.ptr<int>(y,x)[0] = curMedianVal+1;
+            else outImg.ptr<int>(y,x)[0] = curMedianVal;
 
             // Update joint-histogram and BCB when local window is shifted.
             int fval,gval,*curHist;
@@ -641,7 +636,7 @@ namespace cv
 {
 namespace ximgproc
 {
-void weightedMedianFilter(InputArray joint, InputArray src, OutputArray dst, int r, double sigma, int weightType, InputArray mask)
+void weightedMedianFilter(InputArray joint, InputArray src, OutputArray dst, int r, double sigma, WMFWeightType weightType, Mat mask)
 {
     CV_Assert(!src.empty());
     CV_Assert(r > 0 && sigma > 0);
@@ -702,7 +697,7 @@ void weightedMedianFilter(InputArray joint, InputArray src, OutputArray dst, int
     //Filtering - Joint-Histogram Framework
     for(int i=0; i<(int)Is.size(); i++)
     {
-        Is[i] = filterCore(Is[i], F, wMap, r, nF, nI, mask.getMat());
+        Is[i] = filterCore(Is[i], F, wMap, r, nF,nI,mask);
     }
     float2D_release(wMap);
 

@@ -39,9 +39,7 @@
 #define MAPPERPYRAMID_H_
 
 #include "mapper.hpp"
-#include "mapaffine.hpp"
-#include "mapprojec.hpp"
-#include "mapshift.hpp"
+
 
 namespace cv {
 namespace reg {
@@ -52,50 +50,25 @@ namespace reg {
 /*!
  * Calculates a map using a gaussian pyramid
  */
-class CV_EXPORTS_W MapperPyramid: public Mapper
+class CV_EXPORTS MapperPyramid: public Mapper
 {
 public:
     /*
      * Constructor
      * \param[in] baseMapper Base mapper used for the refinements
      */
-    CV_WRAP MapperPyramid(Ptr<Mapper> baseMapper);
+    MapperPyramid(const Mapper& baseMapper);
 
-    CV_WRAP virtual cv::Ptr<Map> calculate(InputArray img1, InputArray img2, cv::Ptr<Map> init = cv::Ptr<Map>()) const;
+    void calculate(const cv::Mat& img1, const cv::Mat& img2, cv::Ptr<Map>& res) const;
 
-    CV_WRAP cv::Ptr<Map> getMap() const;
+    cv::Ptr<Map> getMap(void) const;
 
-    CV_PROP_RW int numLev_;           /*!< Number of levels of the pyramid */
-    CV_PROP_RW int numIterPerScale_;  /*!< Number of iterations at a given scale of the pyramid */
+    unsigned numLev_;           /*!< Number of levels of the pyramid */
+    unsigned numIterPerScale_;  /*!< Number of iterations at a given scale of the pyramid */
 
 private:
     MapperPyramid& operator=(const MapperPyramid&);
     const Mapper& baseMapper_;  /*!< Mapper used in inner level */
-};
-
-/*!
- * Converts a pointer to a Map returned by MapperPyramid::calculate into the specified Map pointer type
- */
-class CV_EXPORTS_W MapTypeCaster
-{
-public:
-    CV_WRAP static Ptr<MapAffine> toAffine(Ptr<Map> sourceMap)
-    {
-        MapAffine& affineMap = dynamic_cast<MapAffine&>(*sourceMap);
-        return Ptr<MapAffine>(new MapAffine(affineMap));
-    }
-
-    CV_WRAP static Ptr<MapShift> toShift(Ptr<Map> sourceMap)
-    {
-        MapShift& shiftMap = dynamic_cast<MapShift&>(*sourceMap);
-        return Ptr<MapShift>(new MapShift(shiftMap));
-    }
-
-    CV_WRAP static Ptr<MapProjec> toProjec(Ptr<Map> sourceMap)
-    {
-        MapProjec& projecMap = dynamic_cast<MapProjec&>(*sourceMap);
-        return Ptr<MapProjec>(new MapProjec(projecMap));
-    }
 };
 
 //! @}
