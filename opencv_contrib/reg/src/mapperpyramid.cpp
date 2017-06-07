@@ -48,23 +48,22 @@ namespace reg {
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-MapperPyramid::MapperPyramid(Ptr<Mapper> baseMapper)
-    : numLev_(3), numIterPerScale_(3), baseMapper_(*baseMapper)
+MapperPyramid::MapperPyramid(const Mapper& baseMapper)
+    : numLev_(3), numIterPerScale_(3), baseMapper_(baseMapper)
 {
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-Ptr<Map> MapperPyramid::calculate(InputArray _img1, InputArray image2, Ptr<Map> init) const
+void MapperPyramid::calculate(const Mat& img1, const Mat& image2, Ptr<Map>& res) const
 {
-    Mat img1 = _img1.getMat();
     Mat img2;
 
-    if(!init.empty()) {
+    if(!res.empty()) {
         // We have initial values for the registration: we move img2 to that initial reference
-        init->inverseWarp(image2, img2);
+        res->inverseWarp(image2, img2);
     } else {
-        init = baseMapper_.getMap();
-        img2 = image2.getMat();
+        res = baseMapper_.getMap();
+        img2 = image2;
     }
 
     cv::Ptr<Map> ident = baseMapper_.getMap();
@@ -73,30 +72,29 @@ Ptr<Map> MapperPyramid::calculate(InputArray _img1, InputArray image2, Ptr<Map> 
     vector<Mat> pyrIm1(numLev_), pyrIm2(numLev_);
     pyrIm1[0] = img1;
     pyrIm2[0] = img2;
-    for(int im_i = 1; im_i < numLev_; ++im_i) {
+    for(size_t im_i = 1; im_i < numLev_; ++im_i) {
         pyrDown(pyrIm1[im_i - 1], pyrIm1[im_i]);
         pyrDown(pyrIm2[im_i - 1], pyrIm2[im_i]);
     }
 
     Mat currRef, currImg;
-    for(int lv_i = 0; lv_i < numLev_; ++lv_i) {
+    for(size_t lv_i = 0; lv_i < numLev_; ++lv_i) {
         currRef = pyrIm1[numLev_ - 1 - lv_i];
         currImg = pyrIm2[numLev_ - 1 - lv_i];
         // Scale the transformation as we are incresing the resolution in each iteration
         if(lv_i != 0) {
             ident->scale(2.);
         }
-        for(int it_i = 0; it_i < numIterPerScale_; ++it_i) {
-            ident = baseMapper_.calculate(currRef, currImg, ident);
+        for(size_t it_i = 0; it_i < numIterPerScale_; ++it_i) {
+            baseMapper_.calculate(currRef, currImg, ident);
         }
     }
 
-    init->compose(ident);
-    return init;
+    res->compose(*ident.get());
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-cv::Ptr<Map> MapperPyramid::getMap() const
+cv::Ptr<Map> MapperPyramid::getMap(void) const
 {
     return cv::Ptr<Map>();
 }

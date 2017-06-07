@@ -2,6 +2,7 @@
 #define OPENCV_TLD_UTILS
 
 #include "precomp.hpp"
+#include "opencv2/highgui.hpp"
 
 namespace cv
 {
@@ -34,6 +35,8 @@ namespace cv
 		void myassert(const Mat& img);
 		void printPatch(const Mat_<uchar>& standardPatch);
 		std::string type2str(const Mat& mat);
+		void drawWithRects(const Mat& img, std::vector<Rect2d>& blackOnes, Rect2d whiteOne = Rect2d(-1.0, -1.0, -1.0, -1.0));
+		void drawWithRects(const Mat& img, std::vector<Rect2d>& blackOnes, std::vector<Rect2d>& whiteOnes, String fileName = "");
 
 		//aux functions and variables
 		template<typename T> inline T CLIP(T x, T a, T b){ return std::min(std::max(x, a), b); }
