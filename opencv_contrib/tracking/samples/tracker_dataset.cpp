@@ -234,7 +234,6 @@ int main(int argc, char *argv[])
 
 
 #else // ! HAVE_OPENCV_DATASETS
-#include <opencv2/core.hpp>
 int main() {
 	CV_Error(cv::Error::StsNotImplemented , "this sample needs to be built with opencv_datasets !");
 	return -1;

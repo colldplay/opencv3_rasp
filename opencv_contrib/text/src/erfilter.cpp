@@ -51,9 +51,7 @@
     typedef int int_fast32_t;
 #else
     #ifndef INT32_MAX
-    #ifndef __STDC_LIMIT_MACROS
     #define __STDC_LIMIT_MACROS
-    #endif
     #include <stdint.h>
     #endif
 #endif

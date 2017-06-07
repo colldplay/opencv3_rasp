@@ -334,7 +334,7 @@ namespace rgbd
    *        depth of `K` if `depth` is of depth CV_U
    * @param mask the mask of the points to consider (can be empty)
    */
-  CV_EXPORTS_W
+  CV_EXPORTS
   void
   depthTo3d(InputArray depth, InputArray K, OutputArray points3d, InputArray mask = noArray());
 
@@ -1026,10 +1026,10 @@ namespace rgbd
    * @param warpedDepth The warped depth.
    * @param warpedMask The warped mask.
    */
-  CV_EXPORTS_W
+  CV_EXPORTS
   void
   warpFrame(const Mat& image, const Mat& depth, const Mat& mask, const Mat& Rt, const Mat& cameraMatrix,
-            const Mat& distCoeff, OutputArray warpedImage, OutputArray warpedDepth = noArray(), OutputArray warpedMask = noArray());
+            const Mat& distCoeff, Mat& warpedImage, Mat* warpedDepth = 0, Mat* warpedMask = 0);
 
 // TODO Depth interpolation
 // Curvature
